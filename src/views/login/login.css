@@ -1,8 +1,27 @@
-.login-form {
-    max-width: 300px;
-    margin: 50px auto !important;
+.login-page {
+    width: 100%;
+    height: 100%;
+    position: relative;
 }
-
+.login-form {
+    position: absolute;
+    left: 50%;
+    top: 25%;
+    width: 300px;
+    margin-left: -150px !important;
+}
+.login-loading {
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+    z-index: 99;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 .login-form-forgot {
     float: right;
 }

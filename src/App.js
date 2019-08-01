@@ -1,12 +1,15 @@
 import React from "react";
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Route } from "react-router-dom";
 import Login from './views/login/login'
-import home from './views/home/index'
+import Base from './views/base/base'
 function BasicExample() {
     return (
         <Router>
             <Route exact path="/" component={Login} />
-            <Route path="/home" component={home} />
+            <Route path="/login" component={Login} />
+            <Route path="/home" component={Base}>
+
+            </Route>
         </Router>
     );
 }
