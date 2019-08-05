@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Form, Icon, Input, Button, Checkbox, Spin } from 'antd';
-import './login.css';
+import './login.less';
 
 class Login extends Component {
     constructor(props) {
@@ -53,7 +53,7 @@ class Login extends Component {
                             valuePropName: 'checked',
                             initialValue: true,
                         })(<Checkbox>是否记住密码？</Checkbox>)}
-                        <a className="login-form-forgot" href="">
+                        <a className="login-form-forgot" href="javascript:void(0)">
                             忘记密码？
                         </a>
                         <Button type="primary" htmlType="submit" className="login-form-button">

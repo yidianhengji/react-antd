@@ -1,17 +1,18 @@
-import React from "react";
-import { BrowserRouter as Router, Route } from "react-router-dom";
-import Login from './views/login/login'
-import Base from './views/base/base'
-function BasicExample() {
-    return (
-        <Router>
-            <Route exact path="/" component={Login} />
-            <Route path="/login" component={Login} />
-            <Route path="/home" component={Base}>
+import React, { Component } from "react";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import Login from './pages/login/login.jsx';
+import Home from './pages/home/home.jsx';
 
-            </Route>
-        </Router>
-    );
+export default class App extends Component {
+    render() {
+        return (
+            <Router>
+                <Switch>
+                    <Route exact path="/" component={Login} />
+                    <Route path="/login" component={Login} />
+                    <Route path="/home" component={Home}></Route>
+                </Switch>
+            </Router>
+        );
+    }
 }
-
-export default BasicExample;
