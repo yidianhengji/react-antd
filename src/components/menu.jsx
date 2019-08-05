@@ -1,8 +1,39 @@
 import React, {Component} from 'react';
 import {Icon, Menu} from "antd";
 import { Link } from "react-router-dom";
+import router from '../router'
 
 class MenuBar extends Component {
+
+    router = (router)=>{
+        return router.map((item,index)=>{
+            const { SubMenu } = Menu;
+            if(!item.children){
+                return (
+                    <Menu.Item key={item.path}>
+                        <Link to={item.path}>
+                            <Icon type={item.icon} />
+                            <span>{item.name}{index}</span>
+                        </Link>
+                    </Menu.Item>
+                )
+            } else {
+                return (
+                    <SubMenu
+                        key={item.path}
+                        title={
+                            <Link to={item.path}>
+                                <Icon type={item.icon} />
+                                <span>{item.name}{index}</span>
+                            </Link>
+                        }
+                    >
+                        {this.router(item.children)}
+                    </SubMenu>
+                )
+            }
+        })
+    }
     render() {
         const { SubMenu } = Menu;
         return (
@@ -13,34 +44,9 @@ class MenuBar extends Component {
                 defaultOpenKeys={['sub1']}
                 mode="inline"
             >
-                <Menu.Item key="1">
-                    <Link to='/home/test'>
-                        <Icon type="home" />
-                        <span>首页</span>
-                    </Link>
-                </Menu.Item>
-                <SubMenu
-                    key="sub1"
-                    title={
-                        <span>
-                            <Icon type="mail" />
-                            <span>列表</span>
-                        </span>
-                    }
-                >
-                    <Menu.Item key="12">
-                        <Link to='/home/test2'>
-                            列表yi
-                        </Link>
-                    </Menu.Item>
-                    <Menu.Item key="2">
-                        <Link to='/home/test3'>
-                            列表yi
-                        </Link>
-                    </Menu.Item>
-                    <Menu.Item key="3">列表三</Menu.Item>
-                    <Menu.Item key="4">列表四</Menu.Item>
-                </SubMenu>
+                {
+                    this.router(router)
+                }
             </Menu>
         )
     }
