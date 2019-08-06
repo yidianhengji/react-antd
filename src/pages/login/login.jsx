@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Form, Icon, Input, Button, Checkbox, Spin } from 'antd';
 import './login.less';
+import {reqLogin} from '../../api/login'
+
 
 class Login extends Component {
     constructor(props) {
@@ -11,13 +13,15 @@ class Login extends Component {
     };
     handleSubmit = e => {
         e.preventDefault();
-        this.props.form.validateFields((err, values) => {
+        this.props.form.validateFields(async (err, values) => {
             if (!err) {
-                this.setState({
+                const req = await reqLogin(values)
+                console.log(req)
+                /*this.setState({
                     isLoading: true,
-                });
-                setInterval(() => this.props.history.push('/home'), 1000);
-                console.log(values)
+                });*/
+                //setInterval(() => this.props.history.push('/home'), 1000);
+
             }
         });
     };
@@ -28,7 +32,7 @@ class Login extends Component {
             <div className="login-page">
                 <Form onSubmit={this.handleSubmit} className="login-form">
                     <Form.Item>
-                        {getFieldDecorator('username', {
+                        {getFieldDecorator('phone', {
                             rules: [{ required: true, message: '请输入账号!' }],
                         })(
                             <Input
