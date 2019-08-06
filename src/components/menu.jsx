@@ -1,55 +1,66 @@
 import React, {Component} from 'react';
 import {Icon, Menu} from "antd";
-import { Link } from "react-router-dom";
+import {Link, withRouter} from "react-router-dom";
 import router from '../router'
 
 class MenuBar extends Component {
 
-    router = (router)=>{
-        return router.map((item,index)=>{
-            const { SubMenu } = Menu;
-            if(!item.children){
+    getMenuRouterConfig = (router) => {
+        const selectedKeys = this.props.location.pathname;
+        return router.map((item, index) => {
+            const {SubMenu} = Menu;
+            if (!item.children) {
                 return (
                     <Menu.Item key={item.path}>
                         <Link to={item.path}>
-                            <Icon type={item.icon} />
-                            <span>{item.name}{index}</span>
+                            <Icon type={item.icon}/>
+                            <span>{item.name}</span>
                         </Link>
                     </Menu.Item>
                 )
             } else {
+                const cItem = item.children.find(cItem => cItem.path === selectedKeys);
+                if (cItem) {
+                    this.openKey = item.path
+                }
                 return (
                     <SubMenu
                         key={item.path}
                         title={
-                            <Link to={item.path}>
-                                <Icon type={item.icon} />
-                                <span>{item.name}{index}</span>
-                            </Link>
+                            <span>
+                                <Icon type={item.icon}/>
+                                <span>{item.name}</span>
+                            </span>
                         }
                     >
-                        {this.router(item.children)}
+                        {this.getMenuRouterConfig(item.children)}
                     </SubMenu>
                 )
             }
         })
-    }
+    };
+
+    componentWillMount() {
+        this.getRouterConfig = this.getMenuRouterConfig(router);
+    };
+
     render() {
-        const { SubMenu } = Menu;
+        const openKey = this.openKey;
+        const selectedKeys = this.props.location.pathname;
         return (
             <Menu
                 theme="dark"
                 onClick={this.handleClick}
-                defaultSelectedKeys={['1']}
-                defaultOpenKeys={['sub1']}
+                selectedKeys={[selectedKeys]}
+                defaultOpenKeys={[openKey]}
                 mode="inline"
             >
                 {
-                    this.router(router)
+                    this.getRouterConfig
                 }
             </Menu>
         )
     }
 }
 
-export default MenuBar;
+export default withRouter(MenuBar);

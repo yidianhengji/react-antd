@@ -7,16 +7,16 @@ const router = [
     {
         name: '列表',
         icon: 'mail',
-        path: './home/list',
+        path: '/home/list',
         children: [
             {
                 name: '新闻',
-                icon: '',
+                icon: 'home',
                 path: '/home/test2',
             },
             {
                 name: '商家',
-                icon: '',
+                icon: 'home',
                 path: '/home/test3',
             }
         ]
