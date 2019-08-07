@@ -29,7 +29,7 @@ class MenuBar extends Component {
                         title={
                             <span>
                                 <Icon type={item.icon}/>
-                                <span>{item.name}</span>
+                                <span>{item.name} {item.isTrue}</span>
                             </span>
                         }
                     >

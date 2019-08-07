@@ -5,6 +5,10 @@ import {Layout} from 'antd';
 import MenuBar from '../../components/menu';
 import HeaderBar from '../../components/header';
 import BreadcrumbBar from '../../components/breadcrumb';
+
+// 用户管理
+import User from './user/user';
+
 import Test from "../module/test";
 import Test2 from "../module/test2";
 import Test3 from "../module/test3";
@@ -46,6 +50,7 @@ class Home extends Component {
                             <div style={{background: '#fff', padding: '15px'}}>
                                 <Switch>
                                     <Route path='/home/test' exact component={Test}/>
+                                    <Route path="/home/user" component={User}/>
                                     <Route path="/home/test2" component={Test2}/>
                                     <Route path="/home/test3" component={Test3}/>
                                     <Redirect to='/home/test'></Redirect>

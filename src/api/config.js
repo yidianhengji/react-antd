@@ -12,7 +12,11 @@ export default function axja(url, data = {}, method = 'GET') {
             promise = axios.post(BASE + url, data)
         }
         promise.then(data => {
-            resolve(data)
+            if(data.data.code===200){
+                resolve(data)
+            } else {
+                message.error(data.data.msg)
+            }
         }).catch(err => {
             message.error("请求出错！"+ err.message)
         })

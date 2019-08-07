@@ -1,3 +1,4 @@
 import ajax from '../../api/config'
 
-export const reqLogin = (data)=> ajax("user/login",data,"POST")
+/* 登录接口 */
+export const reqLogin = (data)=> ajax("user/login",data,"POST");

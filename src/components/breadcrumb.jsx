@@ -4,22 +4,20 @@ import {withRouter} from "react-router-dom";
 import router from '../router'
 
 class BreadcrumbBar extends Component {
-
     getBreadcrumb = () => {
         const pathName = this.props.location.pathname;
-        let breadcrumbHtml = '';
-        router.map((item) => {
+        return router.map((item, index) => {
             if (item.path === pathName) {
-                breadcrumbHtml = (
-                    <Breadcrumb separator=">" style={{padding: '15px 0'}}>
+                return (
+                    <Breadcrumb key={index} separator=">" className="breadcrumb-nav">
                         <Breadcrumb.Item>{item.name}</Breadcrumb.Item>
                     </Breadcrumb>
                 )
             } else if (item.children) {
                 const cItem = item.children.find((cItem) => cItem.path === pathName);
                 if (cItem) {
-                    breadcrumbHtml = (
-                        <Breadcrumb separator=">" style={{padding: '15px 0'}}>
+                    return (
+                        <Breadcrumb key={index} separator=">" className="breadcrumb-nav">
                             <Breadcrumb.Item>{item.name}</Breadcrumb.Item>
                             <Breadcrumb.Item>{cItem.name}</Breadcrumb.Item>
                         </Breadcrumb>
@@ -27,11 +25,9 @@ class BreadcrumbBar extends Component {
                 }
             }
         });
-        return breadcrumbHtml
     };
-
     render() {
-        return this.getBreadcrumb()
+        return this.getBreadcrumb();
     };
 }
 
