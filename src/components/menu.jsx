@@ -4,10 +4,17 @@ import {Link, withRouter} from "react-router-dom";
 import router from '../router'
 
 class MenuBar extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            selectedKeys: ''
+        };
+        this.handleClick = this.handleClick.bind(this);
+    };
 
     getMenuRouterConfig = (router) => {
         const selectedKeys = this.props.location.pathname;
-        return router.map((item, index) => {
+        return router.map((item) => {
             const {SubMenu} = Menu;
             if (!item.children) {
                 return (
@@ -29,7 +36,7 @@ class MenuBar extends Component {
                         title={
                             <span>
                                 <Icon type={item.icon}/>
-                                <span>{item.name} {item.isTrue}</span>
+                                <span>{item.name}</span>
                             </span>
                         }
                     >
@@ -42,22 +49,28 @@ class MenuBar extends Component {
 
     componentWillMount() {
         this.getRouterConfig = this.getMenuRouterConfig(router);
+        this.setState({
+            selectedKeys: this.props.location.pathname
+        })
+    };
+
+    handleClick(item) {
+        this.setState({
+            selectedKeys: item.key
+        })
     };
 
     render() {
         const openKey = this.openKey;
-        const selectedKeys = this.props.location.pathname;
         return (
             <Menu
                 theme="dark"
                 onClick={this.handleClick}
-                selectedKeys={[selectedKeys]}
+                selectedKeys={[this.state.selectedKeys]}
                 defaultOpenKeys={[openKey]}
                 mode="inline"
             >
-                {
-                    this.getRouterConfig
-                }
+                {this.getRouterConfig}
             </Menu>
         )
     }

@@ -22,6 +22,16 @@ class BreadcrumbBar extends Component {
                             <Breadcrumb.Item>{cItem.name}</Breadcrumb.Item>
                         </Breadcrumb>
                     )
+                } else {
+                    const str = item.children.find((cItem) => pathName.indexOf(cItem.path) !== -1);
+                    if(str){
+                        return (
+                            <Breadcrumb key={index} separator=">" className="breadcrumb-nav">
+                                <Breadcrumb.Item>{item.name}</Breadcrumb.Item>
+                                <Breadcrumb.Item>{str.name}</Breadcrumb.Item>
+                            </Breadcrumb>
+                        )
+                    }
                 }
             }
         });

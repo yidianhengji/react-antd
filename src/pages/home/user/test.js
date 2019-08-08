@@ -85,13 +85,8 @@ class User extends Component {
     * 修改按钮
     * */
     updateClick(uuid) {
-        this.props.history.push({
-            pathname: '/home/user/add',
-            query: {
-                type: 2,
-                uuid
-            }
-        })
+        alert(uuid)
+        this.props.history.push('/home/user/add')
     };
     /*
     * 删除按钮
