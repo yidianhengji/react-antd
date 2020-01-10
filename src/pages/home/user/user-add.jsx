@@ -1,9 +1,7 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
     Form,
     Input,
-    Tooltip,
-    Icon,
     Radio,
     Cascader,
     Select,
@@ -14,7 +12,7 @@ import {
     AutoComplete,
 } from 'antd';
 
-const {Option} = Select;
+const { Option } = Select;
 const AutoCompleteOption = AutoComplete.Option;
 const residences = [
     {
@@ -46,12 +44,12 @@ class UserAdd extends Component {
     };
 
     handleConfirmBlur = e => {
-        const {value} = e.target;
-        this.setState({confirmDirty: this.state.confirmDirty || !!value});
+        const { value } = e.target;
+        this.setState({ confirmDirty: this.state.confirmDirty || !!value });
     };
 
     compareToFirstPassword = (rule, value, callback) => {
-        const {form} = this.props;
+        const { form } = this.props;
         if (value && value !== form.getFieldValue('password')) {
             callback('Two passwords that you enter is inconsistent!');
         } else {
@@ -60,9 +58,9 @@ class UserAdd extends Component {
     };
 
     validateToNextPassword = (rule, value, callback) => {
-        const {form} = this.props;
+        const { form } = this.props;
         if (value && this.state.confirmDirty) {
-            form.validateFields(['confirm'], {force: true});
+            form.validateFields(['confirm'], { force: true });
         }
         callback();
     };
@@ -74,24 +72,24 @@ class UserAdd extends Component {
         } else {
             autoCompleteResult = ['.com', '.org', '.net'].map(domain => `${value}${domain}`);
         }
-        this.setState({autoCompleteResult});
+        this.setState({ autoCompleteResult });
     };
 
-    render() {
+    render () {
         /*const uuid = this.props.location.query.uuid;
         const type = this.props.location.query.type;*/
 
-        const {getFieldDecorator} = this.props.form;
-        const {autoCompleteResult} = this.state;
+        const { getFieldDecorator } = this.props.form;
+        const { autoCompleteResult } = this.state;
 
         const formItemLayout = {
             labelCol: {
-                xs: {span: 24},
-                sm: {span: 8},
+                xs: { span: 24 },
+                sm: { span: 8 },
             },
             wrapperCol: {
-                xs: {span: 24},
-                sm: {span: 16},
+                xs: { span: 24 },
+                sm: { span: 16 },
             },
         };
         const tailFormItemLayout = {
@@ -106,10 +104,10 @@ class UserAdd extends Component {
                 },
             },
         };
-        const prefixSelector = getFieldDecorator('prefix', {
+        getFieldDecorator('prefix', {
             initialValue: '86',
         })(
-            <Select style={{width: 70}}>
+            <Select style={{ width: 70 }}>
                 <Option value="86">+86</Option>
                 <Option value="87">+87</Option>
             </Select>,
@@ -120,10 +118,10 @@ class UserAdd extends Component {
         ));
         return (
             <Form {...formItemLayout} onSubmit={this.handleSubmit}>
-                <Form.Item  label="姓名">
+                <Form.Item label="姓名">
                     {getFieldDecorator('name', {
-                        rules: [{required: true, message: '请输入姓名！', whitespace: true}],
-                    })(<Input/>)}
+                        rules: [{ required: true, message: '请输入姓名！', whitespace: true }],
+                    })(<Input />)}
                 </Form.Item>
                 <Form.Item label="性别">
                     {getFieldDecorator('sex')(
@@ -136,10 +134,10 @@ class UserAdd extends Component {
                 <Form.Item label="Phone Number">
                     {getFieldDecorator('phone', {
                         rules: [
-                            {required: true, message: 'Please input your phone number!'},
-                            {type: 'number', message: '请输入数字' }
+                            { required: true, message: 'Please input your phone number!' },
+                            { type: 'number', message: '请输入数字' }
                         ],
-                    })(<Input/>)}
+                    })(<Input />)}
                 </Form.Item>
                 <Form.Item label="Select" hasFeedback>
                     {getFieldDecorator('select', {
@@ -156,21 +154,21 @@ class UserAdd extends Component {
                     {getFieldDecorator('residence', {
                         initialValue: ['zhejiang'],
                         rules: [
-                            {type: 'array', required: true, message: 'Please select your habitual residence!'},
+                            { type: 'array', required: true, message: 'Please select your habitual residence!' },
                         ],
-                    })(<Cascader options={residences}/>)}
+                    })(<Cascader options={residences} />)}
                 </Form.Item>
 
                 <Form.Item label="Website">
                     {getFieldDecorator('website', {
-                        rules: [{required: true, message: 'Please input website!'}],
+                        rules: [{ required: true, message: 'Please input website!' }],
                     })(
                         <AutoComplete
                             dataSource={websiteOptions}
                             onChange={this.handleWebsiteChange}
                             placeholder="website"
                         >
-                            <Input/>
+                            <Input />
                         </AutoComplete>,
                     )}
                 </Form.Item>
@@ -178,8 +176,8 @@ class UserAdd extends Component {
                     <Row gutter={8}>
                         <Col span={12}>
                             {getFieldDecorator('captcha', {
-                                rules: [{required: true, message: 'Please input the captcha you got!'}],
-                            })(<Input/>)}
+                                rules: [{ required: true, message: 'Please input the captcha you got!' }],
+                            })(<Input />)}
                         </Col>
                         <Col span={12}>
                             <Button>Get captcha</Button>
@@ -205,4 +203,4 @@ class UserAdd extends Component {
     }
 }
 
-export default Form.create({name: 'register'})(UserAdd);
+export default Form.create({ name: 'register' })(UserAdd);

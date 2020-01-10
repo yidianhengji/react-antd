@@ -1,7 +1,7 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import LinkBtn from '../../../components/link-btn'
-import {reqUserQueryList} from '../../../api/user';
-import {Divider, Table} from 'antd';
+import { reqUserQueryList } from '../../../api/user';
+import { Divider, Table } from 'antd';
 
 /*
 * 用户管理
@@ -39,7 +39,7 @@ class User extends Component {
                     render: (text, record) => (
                         <span>
                             <LinkBtn onClick={() => this.updateClick(record.uuid)}>修改</LinkBtn>
-                            <Divider type="vertical"/>
+                            <Divider type="vertical" />
                             <LinkBtn onClick={() => this.deleteClick(record.uuid)}>删除</LinkBtn>
                         </span>
                     ),
@@ -54,13 +54,13 @@ class User extends Component {
     fetch = () => {
         this.setState({ loading: true });
         let params = this.state.params;
-        reqUserQueryList(params).then(data => {
-            if (data.data.code === 200) {
+        reqUserQueryList(params).then(res => {
+            if (res.data.code === 1) {
                 const pagination = { ...this.state.pagination };
-                pagination.total = data.data.data.total;
+                pagination.total = res.data.data.total;
                 this.setState({
                     loading: true,
-                    dataList: data.data.data.list,
+                    dataList: res.data.data,
                     pagination,
                 })
             }
@@ -77,14 +77,14 @@ class User extends Component {
         };
         this.setState({
             params: params
-        },() => {
+        }, () => {
             this.fetch();
         });
     };
     /*
     * 修改按钮
     * */
-    updateClick(uuid) {
+    updateClick (uuid) {
         this.props.history.push({
             pathname: '/home/user/add',
             query: {
@@ -96,16 +96,16 @@ class User extends Component {
     /*
     * 删除按钮
     * */
-    deleteClick(uuid){
+    deleteClick (uuid) {
         alert(uuid)
     };
     /*
     * 在渲染前调用异步请求
     * */
-    componentWillMount() {
+    componentWillMount () {
         this.fetch()
     };
-    render() {
+    render () {
         // 列表复选框
         const rowSelection = {
             onChange: (selectedRowKeys, selectedRows) => {

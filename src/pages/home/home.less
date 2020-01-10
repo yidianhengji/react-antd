@@ -48,11 +48,50 @@
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
 }
 
+.header-width-default {
+    width: calc(100% - 200px);
+}
+
+.header-width {
+    width: calc(100% - 80px);
+}
+
+.header-left {
+    float: left;
+}
+
+.header-right {
+    float: right;
+    display: flex;
+
+    .item {
+        padding: 0 10px;
+        box-sizing: border-box;
+
+        .header-user {
+            display: flex;
+            align-items: center;
+            color: rgba(0,0,0,.65);
+            cursor: pointer;
+            margin-right: 10px;
+            
+            img {
+                width: 24px;
+                height: 24px;
+                line-height: 24px;
+                border-radius: 50%;
+                margin-right: 5px;
+            }
+        }
+    }
+}
+
 .layout-content {
     margin: 64px 20px 16px;
-    minHeight: auto;
+    min-height: auto;
 }
 
 .breadcrumb-nav {
     padding: 15px 0
 }
+

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Form, Icon, Input, Button, Spin } from 'antd';
 import './login.less';
-import {reqLogin} from '../../api/login'
+import { reqLogin } from '../../api/login'
 
 
 class Login extends Component {
@@ -16,7 +16,7 @@ class Login extends Component {
         this.props.form.validateFields(async (err, values) => {
             if (!err) {
                 const req = await reqLogin(values);
-                if(req.data.code===200){
+                if (req.data.code === 1) {
                     this.setState({
                         isLoading: true,
                     });
@@ -25,14 +25,14 @@ class Login extends Component {
             }
         });
     };
-    render() {
+    render () {
         const { getFieldDecorator } = this.props.form;
         const isLoading = this.state.isLoading;
         return (
             <div className="login-page">
                 <Form onSubmit={this.handleSubmit} className="login-form">
                     <Form.Item>
-                        {getFieldDecorator('phone', {
+                        {getFieldDecorator('username', {
                             rules: [{ required: true, message: '请输入账号!' }],
                         })(
                             <Input
