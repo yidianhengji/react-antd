@@ -25,7 +25,8 @@ class HeaderBar extends Component {
         super(props);
         this.state = {
             collapsed: false,
-            layoutMenu: 200
+            layoutMenu: 200,
+            userinfo: JSON.parse(window.localStorage.getItem("userinfo"))
         };
     };
 
@@ -39,7 +40,7 @@ class HeaderBar extends Component {
     render () {
         const { Header } = Layout;
         return (
-            <Header className={["header", !this.props.collapsed ? 'header-width-default' : 'header-width']}>
+            <Header className={["header", !this.state.collapsed ? 'header-width-default' : 'header-width']}>
                 <div className="header-left">
                     <Icon
                         className="trigger"
@@ -51,7 +52,7 @@ class HeaderBar extends Component {
                     <div className="item">
                         <Dropdown overlay={menu}>
                             <span className="ant-dropdown-link header-user" type="down">
-                                <img src="https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png" alt="" /> 张三
+                                <img src="https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png" alt="" /> {this.state.userinfo.name}
                             </span>
                         </Dropdown>
                     </div>

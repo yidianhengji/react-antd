@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import LinkBtn from '../../../components/link-btn'
 import { reqUserQueryList } from '../../../api/user';
-import { Divider, Table } from 'antd';
+import { Divider, Table, Form, Row, Col, Input, Button, Icon } from 'antd';
+import './user-list.less';
 
 /*
 * 用户管理
@@ -10,8 +11,9 @@ class User extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            expand: false,
             loading: false,
-            params: {
+            query: {
                 pageSize: 10,
                 pageNum: 1
             },
@@ -44,7 +46,10 @@ class User extends Component {
                         </span>
                     ),
                 },
-            ]
+            ],
+            params: {
+                name: ''
+            }
         };
         this.updateClick = this.updateClick.bind(this);
     };
@@ -81,6 +86,15 @@ class User extends Component {
             this.fetch();
         });
     };
+    handleAdd () {
+        console.log(this)
+        this.props.history.push({
+            pathname: '/home/user/add',
+            query: {
+                type: 1
+            }
+        })
+    };
     /*
     * 修改按钮
     * */
@@ -105,6 +119,15 @@ class User extends Component {
     componentWillMount () {
         this.fetch()
     };
+    handleSearch = e => {
+        e.preventDefault();
+        console.log(this.state.params)
+    };
+
+    toggle = () => {
+        const { expand } = this.state;
+        this.setState({ expand: !expand });
+    };
     render () {
         // 列表复选框
         const rowSelection = {
@@ -117,6 +140,25 @@ class User extends Component {
         };
         return (
             <div>
+                <Form className="ant-advanced-search-form">
+                    <Row type="flex">
+                        <Col span={8} key="1">
+                            <Form.Item label="姓名">
+                                <Input
+                                    placeholder="请输入姓名"
+                                    onBlur={value => {
+                                        console.log(value)
+                                        this.state.params.name = value
+                                    }}
+                                />
+                            </Form.Item>
+                        </Col>
+                        <Col style={{ textAlign: 'right' }}>
+                            <Button type="primary" onClick={this.handleSearch}>搜索</Button>
+                            <Button type="primary" onClick={this.handleAdd.bind(this)}>新增</Button>
+                        </Col>
+                    </Row>
+                </Form>
                 <Table
                     rowKey="uuid"
                     dataSource={this.state.dataList}

@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { message } from 'antd'
-
-const BASE = '/shop/'
+import { BASE } from './path'
 
 export default function axja (url, data = {}, method = 'GET') {
     return new Promise((resolve, reject) => {

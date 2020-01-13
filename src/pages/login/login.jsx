@@ -20,6 +20,7 @@ class Login extends Component {
                     this.setState({
                         isLoading: true,
                     });
+                    window.localStorage.setItem("userinfo", JSON.stringify(req.data.data));
                     setInterval(() => this.props.history.push('/home'), 1000);
                 }
             }
