@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { Form, Icon, Input, Button, Spin } from 'antd';
 import './login.less';
 import { reqLogin } from '../../api/login'
-
+import store from '../../store'
+import { userinfoAction } from '../../store/action-creates'
 
 class Login extends Component {
     constructor(props) {
@@ -10,19 +11,21 @@ class Login extends Component {
         this.state = {
             isLoading: false
         };
+        console.log(store.getState())
     };
     handleSubmit = e => {
         e.preventDefault();
         this.props.form.validateFields(async (err, values) => {
             if (!err) {
-                const req = await reqLogin(values);
-                if (req.data.code === 1) {
-                    this.setState({
-                        isLoading: true,
-                    });
-                    window.localStorage.setItem("userinfo", JSON.stringify(req.data.data));
-                    setInterval(() => this.props.history.push('/home'), 1000);
-                }
+                store.dispatch(userinfoAction(values));
+                // const req = await reqLogin(values);
+                // if (req.data.code === 1) {
+                //     this.setState({
+                //         isLoading: true,
+                //     });
+                //     window.localStorage.setItem("userinfo", JSON.stringify(req.data.data));
+                //     setInterval(() => this.props.history.push('/home'), 1000);
+                // }
             }
         });
     };
@@ -39,7 +42,7 @@ class Login extends Component {
                             <Input
                                 prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
                                 placeholder="请输入账号"
-                            />,
+                            />
                         )}
                     </Form.Item>
                     <Form.Item>
@@ -50,7 +53,7 @@ class Login extends Component {
                                 prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
                                 type="password"
                                 placeholder="请输入密码"
-                            />,
+                            />
                         )}
                     </Form.Item>
                     <Form.Item>
@@ -66,7 +69,7 @@ class Login extends Component {
                 ) : null}
             </div>
         );
-    }
+    };
 }
 
 export default Form.create()(Login);
