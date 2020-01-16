@@ -1,4 +1,9 @@
 import ajax from '../../api/config'
 
-/* 查询角色列表 */
-export const reqRoleQueryAll = (data)=> ajax("role/queryAll",data,"POST");
+export const reqRoleQuery = (data) => ajax("role/query", data, "POST");
+
+export const reqRoleQueryAll = (data) => ajax("role/queryAll", data, "POST");
+
+export const reqRoleAdd = (data) => ajax("role/add", data, "POST");
+
+export const reqRoleUpdate = (data) => ajax("role/update", data, "POST");

@@ -5,14 +5,19 @@ const router = [
         path: '/home/test'
     },
     {
-        name: '用户管理',
+        name: '系统管理',
         icon: 'mail',
-        path: '/home/usermanagement',
+        path: '',
         children: [
             {
                 name: '用户管理',
                 icon: 'home',
                 path: '/home/user',
+            },
+            {
+                name: '角色管理',
+                icon: 'home',
+                path: '/home/roles',
             }
         ]
     },

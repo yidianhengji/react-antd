@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { Menu, Dropdown, Icon, Layout } from "antd";
+import { connect } from 'react-redux'
+import { collapsedAction } from '../store/action-creates'
 
 const onClickMenuItem = (key) => {
     console.log(key)
@@ -24,28 +26,20 @@ class HeaderBar extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            collapsed: false,
-            layoutMenu: 200,
             userinfo: JSON.parse(window.localStorage.getItem("userinfo"))
         };
     };
 
-    toggle = () => {
-        this.setState({
-            collapsed: !this.state.collapsed,
-            layoutMenu: !this.state.collapsed ? 80 : 200
-        });
-    };
-
     render () {
         const { Header } = Layout;
+        const { collapsed, toggle } = this.props;
         return (
-            <Header className={["header", !this.state.collapsed ? 'header-width-default' : 'header-width']}>
+            <Header className={["header", !collapsed ? 'header-width-default' : 'header-width']}>
                 <div className="header-left">
                     <Icon
                         className="trigger"
-                        type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'}
-                        onClick={this.toggle}
+                        type={!collapsed ? 'menu-fold' : 'menu-unfold'}
+                        onClick={toggle}
                     />
                 </div>
                 <div className="header-right">
@@ -62,4 +56,18 @@ class HeaderBar extends Component {
     }
 }
 
-export default HeaderBar;
+const mapStateToProps = (state) => {
+    return {
+        collapsed: state.collapsed
+    }
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        toggle () {
+            dispatch(collapsedAction())
+        }
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(HeaderBar);

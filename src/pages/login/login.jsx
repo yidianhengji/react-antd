@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import { Form, Icon, Input, Button, Spin } from 'antd';
 import './login.less';
 import { reqLogin } from '../../api/login'
-import store from '../../store'
-import { userinfoAction } from '../../store/action-creates'
 
 class Login extends Component {
     constructor(props) {
@@ -11,21 +9,19 @@ class Login extends Component {
         this.state = {
             isLoading: false
         };
-        console.log(store.getState())
     };
     handleSubmit = e => {
         e.preventDefault();
         this.props.form.validateFields(async (err, values) => {
             if (!err) {
-                store.dispatch(userinfoAction(values));
-                // const req = await reqLogin(values);
-                // if (req.data.code === 1) {
-                //     this.setState({
-                //         isLoading: true,
-                //     });
-                //     window.localStorage.setItem("userinfo", JSON.stringify(req.data.data));
-                //     setInterval(() => this.props.history.push('/home'), 1000);
-                // }
+                const req = await reqLogin(values);
+                if (req.data.code === 1) {
+                    this.setState({
+                        isLoading: true,
+                    });
+                    window.localStorage.setItem("userinfo", JSON.stringify(req.data.data));
+                    setInterval(() => this.props.history.push('/home'), 1000);
+                }
             }
         });
     };
@@ -34,6 +30,7 @@ class Login extends Component {
         const isLoading = this.state.isLoading;
         return (
             <div className="login-page">
+                {this.props.inputVlaue}
                 <Form onSubmit={this.handleSubmit} className="login-form">
                     <Form.Item>
                         {getFieldDecorator('username', {
@@ -72,4 +69,4 @@ class Login extends Component {
     };
 }
 
-export default Form.create()(Login);
+export default Form.create()(Login)
