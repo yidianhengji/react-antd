@@ -5,7 +5,7 @@ import {
   Button,
   message
 } from 'antd';
-import { reqRoleAdd } from '../../../api/role';
+import { reqRoleAdd, reqRoleUpdate, reqRoleQueryOne } from '../../../api/role';
 
 class RolesAdd extends Component {
   constructor(props) {
@@ -20,18 +20,30 @@ class RolesAdd extends Component {
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         let type = this.props.location.state.type;
-        if (type == 1) {
-          const hide = message.loading('正在提交中', 0);
+        if (type === 1) {
+          message.loading('正在提交中', 0);
           reqRoleAdd(values).then(res => {
             if (res.data.code === 1) {
               message.destroy()
               message.success(res.data.msg);
               setTimeout(() => {
                 this.props.history.push({
-                  pathname: '/home/roles',
-                  state: {
-                    type: 1
-                  }
+                  pathname: '/home/roles'
+                })
+              }, 1000);
+            }
+          })
+        } else if (type === 2) {
+          message.loading('正在提交中', 0);
+          let params = values
+          params.uuid = this.props.location.state.uuid
+          reqRoleUpdate(params).then(res => {
+            if (res.data.code === 1) {
+              message.destroy()
+              message.success(res.data.msg);
+              setTimeout(() => {
+                this.props.history.push({
+                  pathname: '/home/roles'
                 })
               }, 1000);
             }
@@ -40,6 +52,22 @@ class RolesAdd extends Component {
       }
     });
   };
+
+  componentDidMount () {
+    let type = this.props.location.state.type;
+    if (type === 2) {
+      reqRoleQueryOne({ uuid: this.props.location.state.uuid }).then(res => {
+        if (res.data.code === 1) {
+          const { setFieldsValue } = this.props.form;
+          let params = {
+            name: res.data.data.name,
+            description: res.data.data.description
+          }
+          setFieldsValue(params)
+        }
+      })
+    }
+  }
 
   render () {
     const { getFieldDecorator } = this.props.form;
@@ -88,4 +116,8 @@ class RolesAdd extends Component {
   }
 }
 
-export default Form.create({ name: 'register' })(RolesAdd);
+export default Form.create(
+  {
+    name: 'register'
+  },
+)(RolesAdd);

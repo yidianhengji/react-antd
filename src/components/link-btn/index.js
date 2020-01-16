@@ -4,7 +4,7 @@ import './index.less'
 export default class LinkBtn extends Component {
     render() {
         return (
-            <button className="link-btn" {...this.props}>{this.props.children}</button>
+            <a className="link-btn" {...this.props}>{this.props.children}</a>
         )
     }
 }

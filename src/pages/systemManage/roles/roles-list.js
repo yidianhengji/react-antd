@@ -1,21 +1,14 @@
 import React, { Component } from 'react';
 import LinkBtn from '../../../components/link-btn';
-import { reqRoleQuery } from '../../../api/role';
-import { Divider, Table, Form, Row, Col, Input, Button } from 'antd';
+import { reqRoleQueryAll, reqRoleUpdate } from '../../../api/role';
+import { Divider, Table, Form, Row, Col, Input, Button, Popconfirm, message } from 'antd';
 import '../../../assets/css/list.less';
 
-/*
-* 用户管理
- * */
 class RolesList extends Component {
   constructor(props) {
     super(props);
     this.state = {
       loading: false,
-      query: {
-        pageSize: 10,
-        pageNum: 1
-      },
       selectedRowKeys: [],
       selectedRows: [],
       pagination: {},
@@ -40,27 +33,54 @@ class RolesList extends Component {
             <span>
               <LinkBtn onClick={() => this.updateClick(record.uuid)}>修改</LinkBtn>
               <Divider type="vertical" />
-              <LinkBtn onClick={() => this.deleteClick(record.uuid)}>删除</LinkBtn>
+              <Popconfirm
+                title="是否删除该条记录？"
+                onConfirm={this.confirm.bind(this, record.uuid)}
+                onCancel={this.cancel}
+                okText="是"
+                cancelText="否"
+              >
+                <LinkBtn>删除</LinkBtn>
+              </Popconfirm>
             </span>
           ),
         },
       ],
       params: {
-
-      }
+        pageSize: 10,
+        pageNum: 0,
+        name: ''
+      },
+      visible: false,
+      condition: true,
     };
     this.updateClick = this.updateClick.bind(this);
   };
-  /*
-  * 调用后台用户列表接口
-  * */
+
+  confirm = (uuid) => {
+    this.setState({ visible: false });
+    let params = { uuid, status: 2 }
+    reqRoleUpdate(params).then(res => {
+      if (res.data.code === 1) {
+        message.success('操作成功！');
+        this.fetch();
+      } else {
+        message.error(res.data.msg);
+      }
+    });
+  };
+
+  cancel = () => {
+    this.setState({ visible: false });
+  };
+
   fetch = () => {
     this.setState({ loading: true });
     let params = this.state.params;
-    reqRoleQuery(params).then(res => {
+    reqRoleQueryAll(params).then(res => {
       if (res.data.code === 1) {
         const pagination = { ...this.state.pagination };
-        pagination.total = res.data.data.total;
+        pagination.total = res.data.total;
         this.setState({
           loading: true,
           dataList: res.data.data,
@@ -69,58 +89,47 @@ class RolesList extends Component {
       }
     });
   };
-  /*
-  * 分页回调事件
-  * */
+
   handleTableChange = (pagination, filters, sorter) => {
-    console.log(pagination)
     let params = {
       pageSize: pagination.pageSize,
-      pageNum: pagination.current
+      pageNum: pagination.current - 1
     };
-    this.setState({
-      params: params
-    }, () => {
+    this.setState({ params }, () => {
       this.fetch();
     });
   };
+
   handleAdd () {
-    console.log(this)
     this.props.history.push({
       pathname: '/home/roles/add',
-      state: {
-        type: 1
-      }
+      state: { type: 1 }
     })
   };
-  /*
-  * 修改按钮
-  * */
+
   updateClick (uuid) {
     this.props.history.push({
       pathname: '/home/roles/add',
-      query: {
-        type: 2,
-        uuid
-      }
+      state: { type: 2, uuid }
     })
   };
-  /*
-  * 删除按钮
-  * */
-  deleteClick (uuid) {
-    alert(uuid)
-  };
-  /*
-  * 在渲染前调用异步请求
-  * */
+
   componentWillMount () {
     this.fetch()
   };
+
   handleSearch = e => {
     e.preventDefault();
-    console.log(this.state.params)
+    this.fetch();
   };
+
+  handlechangeName = (event) => {
+    let params = this.state.params;
+    params.name = event.target.value
+    this.setState({
+      params
+    })
+  }
 
   render () {
     // 列表复选框
@@ -140,6 +149,8 @@ class RolesList extends Component {
               <Form.Item label="姓名">
                 <Input
                   placeholder="请输入姓名"
+                  value={this.state.params.name}
+                  onChange={this.handlechangeName.bind(this)}
                 />
               </Form.Item>
             </Col>
