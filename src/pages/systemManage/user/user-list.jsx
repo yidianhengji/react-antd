@@ -32,8 +32,8 @@ class User extends Component {
                     render: text => text === 1 ? <span>男</span> : <span>女</span>
                 },
                 {
-                    title: 'Address',
-                    dataIndex: 'roleName',
+                    title: '手机号码',
+                    dataIndex: 'mobile',
                 },
                 {
                     title: '操作',
@@ -89,9 +89,7 @@ class User extends Component {
         console.log(this)
         this.props.history.push({
             pathname: '/home/user/add',
-            query: {
-                type: 1
-            }
+            state: { type: 1 }
         })
     };
     /*
@@ -100,10 +98,7 @@ class User extends Component {
     updateClick (uuid) {
         this.props.history.push({
             pathname: '/home/user/add',
-            query: {
-                type: 2,
-                uuid
-            }
+            state: { type: 2, uuid }
         })
     };
     /*

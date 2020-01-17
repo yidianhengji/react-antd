@@ -1,4 +1,11 @@
 import ajax from '../../api/config'
 
-/* 查询用户列表 */
+export const reqUserQueryAllList = (data) => ajax("user/queryAll", data, "POST");
+
+export const reqUserQueryOneList = (data) => ajax("user/queryOne", data, "POST");
+
 export const reqUserQueryList = (data) => ajax("user/query", data, "POST");
+
+export const reqUserAddList = (data) => ajax("user/add", data, "POST");
+
+export const reqUserUpdateList = (data) => ajax("user/update", data, "POST");

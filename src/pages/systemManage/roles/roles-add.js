@@ -24,7 +24,6 @@ class RolesAdd extends Component {
           message.loading('正在提交中', 0);
           reqRoleAdd(values).then(res => {
             if (res.data.code === 1) {
-              message.destroy()
               message.success(res.data.msg);
               setTimeout(() => {
                 this.props.history.push({
@@ -32,6 +31,7 @@ class RolesAdd extends Component {
                 })
               }, 1000);
             }
+            message.destroy()
           })
         } else if (type === 2) {
           message.loading('正在提交中', 0);
@@ -39,7 +39,6 @@ class RolesAdd extends Component {
           params.uuid = this.props.location.state.uuid
           reqRoleUpdate(params).then(res => {
             if (res.data.code === 1) {
-              message.destroy()
               message.success(res.data.msg);
               setTimeout(() => {
                 this.props.history.push({
@@ -47,6 +46,7 @@ class RolesAdd extends Component {
                 })
               }, 1000);
             }
+            message.destroy()
           })
         }
       }

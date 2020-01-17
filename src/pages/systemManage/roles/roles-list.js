@@ -16,8 +16,7 @@ class RolesList extends Component {
       columns: [
         {
           title: '名称',
-          dataIndex: 'name',
-          render: text => <LinkBtn>{text}</LinkBtn>
+          dataIndex: 'name'
         },
         {
           title: '描述',
@@ -146,9 +145,9 @@ class RolesList extends Component {
         <Form className="ant-advanced-search-form">
           <Row type="flex">
             <Col span={3} key="1">
-              <Form.Item label="姓名">
+              <Form.Item label="名称">
                 <Input
-                  placeholder="请输入姓名"
+                  placeholder="请输入名称"
                   value={this.state.params.name}
                   onChange={this.handlechangeName.bind(this)}
                 />

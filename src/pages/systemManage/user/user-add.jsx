@@ -9,44 +9,97 @@ import {
     message
 } from 'antd';
 import { BASE } from '../../../api/path'
+import { reqRoleQuery } from '../../../api/role';
+import { reqUserAddList, reqUserUpdateList } from '../../../api/user';
 
 const { Option } = Select;
 
-function beforeUpload (file) {
-    const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
-    if (!isJpgOrPng) {
-        message.error('You can only upload JPG/PNG file!');
-    }
-    const isLt2M = file.size / 1024 / 1024 < 2;
-    if (!isLt2M) {
-        message.error('Image must smaller than 2MB!');
-    }
-    return isJpgOrPng && isLt2M;
-}
 
 class UserAdd extends Component {
     constructor(props) {
         super(props);
         this.state = {
             loading: false,
-            action: BASE + 'upload'
+            action: BASE + 'upload',
+            roleDataList: [],
+            imageUrl: ''
         };
+    };
+    componentWillMount () {
+        reqRoleQuery().then(res => {
+            if (res.data.code === 1) {
+                this.setState({
+                    roleDataList: res.data.data,
+                })
+            }
+        });
     };
 
     handleSubmit = e => {
         e.preventDefault();
         this.props.form.validateFieldsAndScroll((err, values) => {
             if (!err) {
-                console.log('Received values of form: ', values);
+                let type = this.props.location.state.type;
+                if (type === 1) {
+                    message.loading('正在提交中', 0);
+                    values.headPic = this.state.imageUrl
+                    reqUserAddList(values).then(res => {
+                        if (res.data.code === 1) {
+                            message.success(res.data.msg);
+                            setTimeout(() => {
+                                this.props.history.push({
+                                    pathname: '/home/user'
+                                })
+                            }, 1000);
+                        }
+                        message.destroy()
+                    })
+                } else if (type === 2) {
+                    message.loading('正在提交中', 0);
+                    let params = values
+                    params.uuid = this.props.location.state.uuid
+                    reqUserUpdateList(params).then(res => {
+                        if (res.data.code === 1) {
+                            message.success(res.data.msg);
+                            setTimeout(() => {
+                                this.props.history.push({
+                                    pathname: '/home/user'
+                                })
+                            }, 1000);
+                        }
+                        message.destroy()
+                    })
+                }
             }
         });
     };
 
 
-    handleChange = info => {
-        console.log(info)
-    };
+    beforeUpload (file) {
+        const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
+        if (!isJpgOrPng) {
+            message.error('You can only upload JPG/PNG file!');
+        }
+        const isLt2M = file.size / 1024 / 1024 < 2;
+        if (!isLt2M) {
+            message.error('Image must smaller than 2MB!');
+        }
+        return isJpgOrPng && isLt2M;
+    }
 
+    handleChange = info => {
+        if (info.file.status === 'uploading') {
+            this.setState({ loading: true });
+            return;
+        }
+        if (info.file.status === 'done') {
+            console.log(info)
+            this.setState({
+                imageUrl: info.file.response.data[0].url,
+                loading: false,
+            })
+        }
+    }
     render () {
         const { getFieldDecorator } = this.props.form;
 
@@ -57,7 +110,7 @@ class UserAdd extends Component {
             },
             wrapperCol: {
                 xs: { span: 24 },
-                sm: { span: 20 },
+                sm: { span: 14 },
             },
         };
         const tailFormItemLayout = {
@@ -67,7 +120,7 @@ class UserAdd extends Component {
                     offset: 0,
                 },
                 sm: {
-                    span: 16,
+                    span: 10,
                     offset: 4,
                 },
             },
@@ -79,6 +132,11 @@ class UserAdd extends Component {
                 <div className="ant-upload-text">Upload</div>
             </div>
         );
+
+        const getRoleData = this.state.roleDataList.map(item => (
+            <Option key={item.uuid}>{item.name}</Option>
+        ));
+
         const { imageUrl } = this.state;
         return (
             <Form {...formItemLayout} onSubmit={this.handleSubmit}>
@@ -102,7 +160,7 @@ class UserAdd extends Component {
                     )}
                 </Form.Item>
                 <Form.Item label="手机号码">
-                    {getFieldDecorator('phone', {
+                    {getFieldDecorator('mobile', {
                         rules: [
                             { required: true, message: '请输入手机号码' }
                         ]
@@ -113,8 +171,7 @@ class UserAdd extends Component {
                         rules: [{ required: true, message: '请选择角色' }],
                     })(
                         <Select placeholder="请选择">
-                            <Option value="china">China</Option>
-                            <Option value="usa">U.S.A</Option>
+                            {getRoleData}
                         </Select>
                     )}
                 </Form.Item>
@@ -126,7 +183,7 @@ class UserAdd extends Component {
                             className="avatar-uploader"
                             showUploadList={false}
                             action={this.state.action}
-                            beforeUpload={beforeUpload}
+                            beforeUpload={this.beforeUpload}
                             onChange={this.handleChange}
                         >
                             {imageUrl ? <img src={imageUrl} alt="avatar" style={{ width: '100%' }} /> : uploadButton}
