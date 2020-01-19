@@ -131,7 +131,6 @@ class RolesList extends Component {
   }
 
   render () {
-    // 列表复选框
     const rowSelection = {
       onChange: (selectedRowKeys, selectedRows) => {
         this.setState({

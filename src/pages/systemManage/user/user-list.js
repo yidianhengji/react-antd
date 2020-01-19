@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import LinkBtn from '../../../components/link-btn';
-import { reqUserQueryList } from '../../../api/user';
+import { reqUserQueryAllList } from '../../../api/user';
 import { Divider, Table, Form, Row, Col, Input, Button } from 'antd';
 import '../../../assets/css/list.less';
 
@@ -12,10 +12,6 @@ class User extends Component {
         super(props);
         this.state = {
             loading: false,
-            query: {
-                pageSize: 10,
-                pageNum: 1
-            },
             selectedRowKeys: [],
             selectedRows: [],
             pagination: {},
@@ -36,6 +32,14 @@ class User extends Component {
                     dataIndex: 'mobile',
                 },
                 {
+                    title: '所属角色',
+                    dataIndex: 'roleName',
+                },
+                {
+                    title: '创建时间',
+                    dataIndex: 'create_time'
+                },
+                {
                     title: '操作',
                     render: (text, record) => (
                         <span>
@@ -47,21 +51,22 @@ class User extends Component {
                 },
             ],
             params: {
-                name: ''
-            }
+                pageSize: 10,
+                pageNum: 0,
+                name: '',
+                mobile: ''
+            },
         };
         this.updateClick = this.updateClick.bind(this);
     };
-    /*
-    * 调用后台用户列表接口
-    * */
+
     fetch = () => {
         this.setState({ loading: true });
         let params = this.state.params;
-        reqUserQueryList(params).then(res => {
+        reqUserQueryAllList(params).then(res => {
             if (res.data.code === 1) {
                 const pagination = { ...this.state.pagination };
-                pagination.total = res.data.data.total;
+                pagination.total = res.data.total;
                 this.setState({
                     loading: true,
                     dataList: res.data.data,
@@ -70,18 +75,13 @@ class User extends Component {
             }
         });
     };
-    /*
-    * 分页回调事件
-    * */
+
     handleTableChange = (pagination, filters, sorter) => {
-        console.log(pagination)
         let params = {
             pageSize: pagination.pageSize,
-            pageNum: pagination.current
+            pageNum: pagination.current - 1
         };
-        this.setState({
-            params: params
-        }, () => {
+        this.setState({ params }, () => {
             this.fetch();
         });
     };
@@ -92,34 +92,39 @@ class User extends Component {
             state: { type: 1 }
         })
     };
-    /*
-    * 修改按钮
-    * */
+
     updateClick (uuid) {
         this.props.history.push({
             pathname: '/home/user/add',
             state: { type: 2, uuid }
         })
     };
-    /*
-    * 删除按钮
-    * */
+
     deleteClick (uuid) {
         alert(uuid)
     };
-    /*
-    * 在渲染前调用异步请求
-    * */
+
     componentWillMount () {
         this.fetch()
     };
     handleSearch = e => {
         e.preventDefault();
-        console.log(this.state.params)
+        this.fetch();
     };
 
+    handlechangeName = (event) => {
+        let params = this.state.params;
+        params.name = event.target.value;
+        this.setState({ params });
+    }
+
+    handlechangeMobile = (event) => {
+        let params = this.state.params;
+        params.mobile = event.target.value;
+        this.setState({ params });
+    }
+
     render () {
-        // 列表复选框
         const rowSelection = {
             onChange: (selectedRowKeys, selectedRows) => {
                 this.setState({
@@ -136,6 +141,17 @@ class User extends Component {
                             <Form.Item label="姓名">
                                 <Input
                                     placeholder="请输入姓名"
+                                    value={this.state.params.name}
+                                    onChange={this.handlechangeName.bind(this)}
+                                />
+                            </Form.Item>
+                        </Col>
+                        <Col span={3} key="1" style={{ marginLeft: '10px' }}>
+                            <Form.Item label="手机号">
+                                <Input
+                                    placeholder="请输入手机号码"
+                                    value={this.state.params.mobile}
+                                    onChange={this.handlechangeMobile.bind(this)}
                                 />
                             </Form.Item>
                         </Col>

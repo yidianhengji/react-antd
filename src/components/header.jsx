@@ -46,7 +46,7 @@ class HeaderBar extends Component {
                     <div className="item">
                         <Dropdown overlay={menu}>
                             <span className="ant-dropdown-link header-user" type="down">
-                                <img src="https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png" alt="" /> {this.state.userinfo.name}
+                                <img src={this.state.userinfo.head_pic ? this.state.userinfo.head_pic : 'https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png'} alt="" /> {this.state.userinfo.name}
                             </span>
                         </Dropdown>
                     </div>

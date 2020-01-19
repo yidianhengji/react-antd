@@ -10,7 +10,7 @@ import {
 } from 'antd';
 import { BASE } from '../../../api/path'
 import { reqRoleQuery } from '../../../api/role';
-import { reqUserAddList, reqUserUpdateList } from '../../../api/user';
+import { reqUserAddList, reqUserUpdateList, reqUserQueryOneList } from '../../../api/user';
 
 const { Option } = Select;
 
@@ -25,7 +25,8 @@ class UserAdd extends Component {
             imageUrl: ''
         };
     };
-    componentWillMount () {
+    componentDidMount () {
+        let type = this.props.location.state.type;
         reqRoleQuery().then(res => {
             if (res.data.code === 1) {
                 this.setState({
@@ -33,6 +34,21 @@ class UserAdd extends Component {
                 })
             }
         });
+        if (type === 2) {
+            reqUserQueryOneList({ uuid: this.props.location.state.uuid }).then(res => {
+                if (res.data.code === 1) {
+                    const { setFieldsValue } = this.props.form;
+                    let params = {
+                        name: res.data.data.name,
+                        sex: res.data.data.sex + '',
+                        mobile: res.data.data.mobile,
+                        role_id: res.data.data.role_id
+                    }
+                    this.setState({ imageUrl: res.data.data.head_pic })
+                    setFieldsValue(params)
+                }
+            })
+        }
     };
 
     handleSubmit = e => {
@@ -42,7 +58,7 @@ class UserAdd extends Component {
                 let type = this.props.location.state.type;
                 if (type === 1) {
                     message.loading('正在提交中', 0);
-                    values.headPic = this.state.imageUrl
+                    values.head_pic = this.state.imageUrl
                     reqUserAddList(values).then(res => {
                         if (res.data.code === 1) {
                             message.success(res.data.msg);
@@ -56,8 +72,9 @@ class UserAdd extends Component {
                     })
                 } else if (type === 2) {
                     message.loading('正在提交中', 0);
-                    let params = values
-                    params.uuid = this.props.location.state.uuid
+                    let params = values;
+                    params.uuid = this.props.location.state.uuid;
+                    params.head_pic = this.state.imageUrl;
                     reqUserUpdateList(params).then(res => {
                         if (res.data.code === 1) {
                             message.success(res.data.msg);
@@ -93,7 +110,6 @@ class UserAdd extends Component {
             return;
         }
         if (info.file.status === 'done') {
-            console.log(info)
             this.setState({
                 imageUrl: info.file.response.data[0].url,
                 loading: false,
@@ -102,7 +118,6 @@ class UserAdd extends Component {
     }
     render () {
         const { getFieldDecorator } = this.props.form;
-
         const formItemLayout = {
             labelCol: {
                 xs: { span: 24 },
@@ -129,9 +144,17 @@ class UserAdd extends Component {
         const uploadButton = (
             <div>
                 <Icon type={this.state.loading ? 'loading' : 'plus'} />
-                <div className="ant-upload-text">Upload</div>
+                <div className="ant-upload-text">上传图片</div>
             </div>
         );
+
+        const sexDataList = [
+            { value: 1, name: "男" },
+            { value: 2, name: "女" }
+        ];
+        const getSexData = sexDataList.map(item => (
+            <Option key={item.value}>{item.name}</Option>
+        ));
 
         const getRoleData = this.state.roleDataList.map(item => (
             <Option key={item.uuid}>{item.name}</Option>
@@ -154,8 +177,7 @@ class UserAdd extends Component {
                         ]
                     })(
                         <Select placeholder="请选择">
-                            <Option value="1">男</Option>
-                            <Option value="2">女</Option>
+                            {getSexData}
                         </Select>
                     )}
                 </Form.Item>
@@ -167,7 +189,7 @@ class UserAdd extends Component {
                     })(<Input />)}
                 </Form.Item>
                 <Form.Item label="角色" hasFeedback>
-                    {getFieldDecorator('roleId', {
+                    {getFieldDecorator('role_id', {
                         rules: [{ required: true, message: '请选择角色' }],
                     })(
                         <Select placeholder="请选择">
@@ -176,7 +198,7 @@ class UserAdd extends Component {
                     )}
                 </Form.Item>
                 <Form.Item label="头像" hasFeedback>
-                    {getFieldDecorator('headPic')(
+                    {getFieldDecorator('head_pic')(
                         <Upload
                             name="avatar"
                             listType="picture-card"
@@ -191,9 +213,7 @@ class UserAdd extends Component {
                     )}
                 </Form.Item>
                 <Form.Item {...tailFormItemLayout}>
-                    <Button type="primary" htmlType="submit">
-                        Register
-                    </Button>
+                    <Button type="primary" htmlType="submit">保存</Button>
                 </Form.Item>
             </Form>
         )
