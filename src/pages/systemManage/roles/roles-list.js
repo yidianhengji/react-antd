@@ -124,10 +124,8 @@ class RolesList extends Component {
 
   handlechangeName = (event) => {
     let params = this.state.params;
-    params.name = event.target.value
-    this.setState({
-      params
-    })
+    params.name = event.target.value;
+    this.setState({ params });
   }
 
   render () {
