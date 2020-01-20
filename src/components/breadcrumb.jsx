@@ -14,6 +14,7 @@ class BreadcrumbBar extends Component {
                         <Breadcrumb key={index} separator="/" className="breadcrumb-nav">
                             <Breadcrumb.Item href="/home/test">首页</Breadcrumb.Item>
                             <Breadcrumb.Item>{item.name}</Breadcrumb.Item>
+                            <Breadcrumb.Item>{cItem.name}</Breadcrumb.Item>
                         </Breadcrumb>
                     )
                 } else {

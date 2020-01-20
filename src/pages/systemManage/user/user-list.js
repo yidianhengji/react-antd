@@ -146,7 +146,7 @@ class User extends Component {
                                 />
                             </Form.Item>
                         </Col>
-                        <Col span={3} key="1" style={{ marginLeft: '10px' }}>
+                        <Col span={3} key="2" style={{ marginLeft: '10px' }}>
                             <Form.Item label="手机号">
                                 <Input
                                     placeholder="请输入手机号码"

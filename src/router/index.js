@@ -18,6 +18,11 @@ const router = [
                 name: '角色管理',
                 icon: 'home',
                 path: '/home/roles',
+            },
+            {
+                name: '菜单管理',
+                icon: 'home',
+                path: '/home/menus',
             }
         ]
     },

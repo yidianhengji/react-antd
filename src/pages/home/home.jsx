@@ -15,12 +15,9 @@ import LogoImg from '../../assets/logo.png';
 import Test from '../module/test'
 import User from '../systemManage/user/user';
 import Roles from '../systemManage/roles/roles';
+import Menus from '../systemManage/menus/menus';
 
 class Home extends Component {
-
-    constructor(props) {
-        super(props);
-    };
 
     handleClick = (item) => {
         let path = item.item.props.path;
@@ -35,7 +32,7 @@ class Home extends Component {
         return (
             <Layout>
                 <Sider trigger={null} collapsible collapsed={collapsed} className="layout-sider">
-                    {!collapsed ? <div className="logo">后台管理系统</div> : <div className="logo"><img className="logo-img" src={LogoImg} /></div>}
+                    {!collapsed ? <div className="logo">后台管理系统</div> : <div className="logo"><img className="logo-img" src={LogoImg} alt="" /></div>}
                     <Scrollbars className="menu-height">
                         <MenuBar></MenuBar>
                     </Scrollbars>
@@ -46,10 +43,11 @@ class Home extends Component {
                         <Content className="layout-content">
                             <BreadcrumbBar></BreadcrumbBar>
                             <Switch>
-                                <Route path='/home/test' exact component={Test} />
+                                <Route path="/home/test" exact component={Test} />
                                 <Route path="/home/user" component={User} />
                                 <Route path="/home/roles" component={Roles} />
-                                <Redirect to='/home/test'></Redirect>
+                                <Route path="/home/menus" component={Menus} />
+                                <Redirect to="/home/test"></Redirect>
                             </Switch>
                         </Content>
                     </Scrollbars>
