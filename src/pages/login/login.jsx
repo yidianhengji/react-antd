@@ -19,7 +19,8 @@ class Login extends Component {
                     this.setState({
                         isLoading: true,
                     });
-                    window.localStorage.setItem("userinfo", JSON.stringify(req.data.data));
+                    localStorage.setItem("userinfo", JSON.stringify(req.data.data));
+                    localStorage.setItem("token", req.data.token);
                     setInterval(() => this.props.history.push('/home'), 1000);
                 }
             }
